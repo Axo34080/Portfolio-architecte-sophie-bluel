@@ -24,15 +24,17 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
   const userEmail = email.value;
   const userPassword = password.value;
-
+  document.getElementById('error').innerHTML = '';
    // Vérifiez l'email et le mot de passe avant d'envoyer la requête
    if (!validateEmail(userEmail)) {
-    alert('Email non valide');
+    document.getElementById('error').innerHTML = 'Email non valide';
+    error.style.color = "red";
     return;
   }
 
   if (!validatePassword(userPassword)) {
-    alert('Mot de passe non valide');
+    document.getElementById('error').innerHTML = 'Mot de passe non valide';
+    error.style.color = "red";
     return;
   }
   const login = {

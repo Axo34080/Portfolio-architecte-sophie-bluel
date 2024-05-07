@@ -1,0 +1,10 @@
+Fonctionnement appel API
+Comment sont récuperer les données 
+Connexion utilisateur 
+Difference code connecté / non connecté 
+comment j'ai mis en place le filtre des catégories
+traitement d'envoie des nouvelles images 
+
+Manipulation du DOM ( Comment cibler un element, comment rentrer du html, comment faire une boucle, comment faire pour ne pas que cela recharge , gestion des evenements, comment integrer des element dans js avec html, traitement du formulaire
+comment gerer les erreurs sur le formulaire, console sans erreurs ) 
+

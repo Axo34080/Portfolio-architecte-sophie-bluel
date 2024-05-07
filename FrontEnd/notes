@@ -1,0 +1,14 @@
+notes
+
+
+// Définir une variable globale pour stocker la liste des photos
+// tout début du code modal
+let photos = [];
+// Fonction pour ajouter une nouvelle photo à la liste locale
+function ajouterPhotoAGalerie(photo) {
+  photos.push(photo);
+}
+// Fonction pour supprimer une photo de la liste locale
+function supprimerPhotoDeGalerie(idPhoto) {
+  photos = photos.filter(photo => photo.id !== idPhoto);
+}

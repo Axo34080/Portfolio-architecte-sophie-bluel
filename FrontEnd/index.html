@@ -9,6 +9,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<script src="https://kit.fontawesome.com/5fcbfd7080.js" crossorigin="anonymous"></script>
 	
 </head>
 <body>
@@ -64,6 +65,7 @@
 							<input type="file" name="image" id="file" accept="image/jpg, image/png" required>
 							<img id="previewImage" src="#" alt="Aperçu de l'image">
 						</div>
+						<div id = errormodal></div>
 						<label for="title">Titre</label>
 						<input type="text" name="title" id="title" required>
 						<label for="categoryInput">Catégorie</label>
@@ -93,6 +95,7 @@
 				<textarea name="message" id="message" cols="30" rows="10"></textarea>
 				<input type="submit" value="Envoyer">
 			</form>
+			
 		</section>
 	</main>
 
@@ -109,7 +112,7 @@
 		</ul>
 	</nav>
 </footer>
-<script src="js/galerie.js" defer></script>
-<script src="js/modalnew.js" defer></script>
+<script src="JS/galerie.js" defer></script>
+<script src="JS/modalnew.js" defer></script>
 </body>
 </html>

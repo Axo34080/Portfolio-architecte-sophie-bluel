@@ -12,13 +12,14 @@ const inputCategory = document.querySelector("#categoryInput");
 const inputFile = document.querySelector("#file");
 const previewImage = document.getElementById("previewImage");
 
-
+let localImages = [];
 //Fonction Principale pour l'affichage des works dans la Modale
-function mainModal() {
+async function mainModal() {
+  const works = await getWorks();
   displayCategoryModal();
   if (user) {
     displayModal();
-    displayWorksModal();
+    displayWorksModal(works);
     closeModalGallery();
     displayModalAddWorks();
     returnToModalPortfolio();
@@ -33,24 +34,20 @@ mainModal();
 function displayModal() {
   const modeEdition = document.querySelector(".div-edit span");
   modeEdition.addEventListener("click", () => {
-    // console.log("mode édition click");
     modalContent.style.display = "flex";
     modalPortfolio.style.display = "flex";
     modalAddWorks.style.display = "none";
   });
 }
 // récupération des works + appel displayworksModal
-function displayWorksModal() {
+function displayWorksModal(works) {
   modalGallery.innerHTML = "";
-  getWorks().then((works) => {
     //Boucle qui parcours  nos works
-    // console.log(works);
     works.forEach((work) => {
       createWorkModal(work);
     });
     deleteWork();
-  });
-}
+  }
 // création des balises et injection des donnés a partir du fetchWorks
 function createWorkModal(work) {
   const figure = document.createElement("figure");
@@ -89,7 +86,6 @@ function closeModalGallery() {
     inputFile.value = "";
     previewImage.style.display = "none";
     modalContent.style.display = "none";
-      // console.log(e.target);
     }
   });
 }
@@ -108,17 +104,12 @@ const deleteWorkID = {
 //Supréssion au click sur la poubelle et mise a jour modale et gallery principale
 function deleteWork() {
   const trashs = document.querySelectorAll(".fa-trash-can")
-   // console.log(trashs);
   trashs.forEach(trash => {
-    console.log(trash);
     trash.addEventListener("click", (e) => {
-      // console.log(e);
       const workID = trash.id;
-      // console.log(trash);
-      fetch(`http://localhost:5678/api/works/${workID}`, deleteWorkID).then(
-        () => {
-          displayWorksModal();
-          displayWorksGallery();
+      fetch(`http://localhost:5678/api/works/${workID}`, deleteWorkID).then(() => {
+        // Suppression de l'élément du DOM après confirmation de la suppression en base de données
+        trash.parentElement.parentElement.remove();
         }
       );
     });
@@ -142,7 +133,6 @@ function returnToModalPortfolio() {
     //Supréssion de la prewiew a clik sur retour dans la modale
     inputFile.value = "";
     previewImage.style.display = "none";
-    console.log("coucou");
     modalPortfolio.style.display = "flex";
     modalAddWorks.style.display = "none";
   });
@@ -153,6 +143,28 @@ function validateImageFile(file) {
   const regex = /\.(jpe?g|png|gif)$/i;
   return regex.test(file.name);
 }
+function addWorkToGallery(work) {
+  //ajout du travail au tableau local
+  localImages.push(work);
+  
+  // Créez un nouvel élément DOM pour le projet
+  const newWork = document.createElement('div');
+  newWork.classList.add('work'); // Ajoutez la classe 'work' à l'élément
+
+  // Ajoutez l'image du projet
+  const newWorkImage = document.createElement('img');
+  newWorkImage.src = work.imageUrl; // Utilisez l'URL de l'image renvoyée par le serveur
+  newWork.appendChild(newWorkImage);
+
+  // Ajoutez l'icône de la poubelle
+  const newTrashIcon = document.createElement('i');
+  newTrashIcon.classList.add('fa-trash-can');
+  newWork.appendChild(newTrashIcon);
+
+  // Ajoutez le nouveau projet à la galerie
+  const gallery = document.querySelector('.gallery');
+  gallery.appendChild(newWork);
+}
 function addWorks() {
   // verification du formulaire et recuperation des champs necessaires uniquement
   formAddWorks.addEventListener("submit", (e) => {
@@ -162,8 +174,13 @@ function addWorks() {
     const file = formData.get('image');
     
   // Vérifiez que le fichier est une image
+  if (!file || !file.name) {
+    console.error('No file selected.');
+    return;
+}
   if (!validateImageFile(file)) {
-    alert('Le fichier doit être une image (jpg, jpeg, png, gif)');
+    document.getElementById('errormodal').innerHTML = 'Le fichier doit être une image (jpg, jpeg, png, gif)';
+    errormodal.style.color = "red";
     return;
   }
     fetch("http://localhost:5678/api/works", {
@@ -180,9 +197,7 @@ function addWorks() {
         return response.json();
       })
       .then((data) => {
-        // console.log("Fichier envoyé avec succès :", data);
-        displayWorksModal();
-        displayWorksGallery();
+        addWorkToGallery(data);
         formAddWorks.reset();
         modalPortfolio.style.display = "flex";
         modalAddWorks.style.display = "none";
@@ -195,26 +210,30 @@ function addWorks() {
 }
 
 // Génère les catégorie dynamiquement pour la modale
-async function displayCategoryModal() {
+function displayCategoryModal() {
   const select = document.querySelector("form select");
-  const categorys = await getCategory();
-  categorys.forEach((category) => {
-    const option = document.createElement("option");
-    option.value = category.id;
-    option.textContent = category.name;
-    select.appendChild(option);
+
+  getCategory().then((categorys) => {
+    categorys.forEach((category) => {
+      const option = document.createElement("option");
+      option.value = category.id;
+      option.textContent = category.name;
+      select.appendChild(option);
+    });
   });
 }
 // Prévisualisation de l'image
 function prevImg() {
   inputFile.addEventListener("change", () => {
     const file = inputFile.files[0];
-    // console.log(file);
     if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {
         previewImage.src = e.target.result;
         previewImage.style.display = "block";
+        previewImage.style.objectFit = "contain";
+        previewImage.style.maxWidth = "100%";
+        previewImage.style.height = "auto";
         // labelFile.style.display ="none"
         // paragraphFile.style.display ="none"
       };
@@ -240,8 +259,3 @@ function verifFormCompleted() {
   });
 }
 
-
-//repasser la poubelle en 1er plan pour la faire fonctionne 
-//Supression des photos modale 
-//ni rechargement ni fetch pour recuperer la liste ( traitement sur tableau local)
-//verification token ( a connaitre ) 

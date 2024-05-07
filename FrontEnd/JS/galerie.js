@@ -7,13 +7,14 @@ const logOut = document.getElementById("login-link");
 const sectionPortfolio = document.querySelector("#portfolio");
 const sectionPortfolioH2 = document.querySelector("#portfolio h2");
 const adminText = "Mode édition";
+const divEditText = "Modifier";
 const adminLogo = `<i class="fa-regular fa-pen-to-square"></i>`;
 const adminConexionUP = `<div class="admin-edit">
 <p>${adminLogo}${adminText}</p>
 </div>`;
 const divEdit = document.createElement("div");
 const spanEdit = document.createElement("span");
-const adminConexionDown = `${adminLogo}  ${adminText} `;
+const adminConexionDown = `${adminLogo}  ${divEditText}`;
 
 /* works avec API */
 async function getWorks() {
@@ -105,7 +106,8 @@ async function displayByCategory() {
 }
 
 // Admin mode
-function logginAdmin() {
+async function logginAdmin() {
+  const works = await getWorks();
   if (user) {
     // Modifications si L'utilisateur est connecté
     // console.log("L'utilisateur est connecté");
