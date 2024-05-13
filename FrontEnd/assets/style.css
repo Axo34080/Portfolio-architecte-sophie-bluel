@@ -149,9 +149,6 @@ li:hover {
 #filters-container {
 	display: flex;
 	width: 100%;
-
-
-	
 }
 input[type="submit"], button {
 	font-family: 'Syne';
@@ -348,7 +345,6 @@ footer nav ul {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	gap: 15px;
 	height: 100px;
   }
   #portfolio .container-filtres .buttons-filtres {
@@ -362,6 +358,7 @@ footer nav ul {
 	font-family: Syne;
 	cursor: pointer;
 	width: auto;
+	margin: 0 4px;
   }
   #portfolio .container-filtres .active {
 	background-color: #1d6154;
@@ -612,8 +609,8 @@ footer nav ul {
   }
   .modalAddWorks form .containerAddPhoto img {
 	display: none;
-	max-width: 76px;
-	height: 100%;
+	max-width: 100%;
+	height: auto;
 	z-index: 2;
 	position: absolute;
   }

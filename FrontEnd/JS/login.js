@@ -14,7 +14,7 @@ function validateEmail(email) {
 
 function validatePassword(password) {
   // Au moins 6 caractères, une lettre majuscule, une lettre minuscule et un chiffre
-  const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+  const regex = /^.{0,}$/;
   return regex.test(password);
 }
 
@@ -27,14 +27,10 @@ form.addEventListener("submit", (e) => {
   document.getElementById('error').innerHTML = '';
    // Vérifiez l'email et le mot de passe avant d'envoyer la requête
    if (!validateEmail(userEmail)) {
-    document.getElementById('error').innerHTML = 'Email non valide';
-    error.style.color = "red";
     return;
   }
 
   if (!validatePassword(userPassword)) {
-    document.getElementById('error').innerHTML = 'Mot de passe non valide';
-    error.style.color = "red";
     return;
   }
   const login = {

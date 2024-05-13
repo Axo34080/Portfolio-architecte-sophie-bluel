@@ -165,6 +165,7 @@ function addWorkToGallery(work) {
   const gallery = document.querySelector('.gallery');
   gallery.appendChild(newWork);
 }
+
 function addWorks() {
   // verification du formulaire et recuperation des champs necessaires uniquement
   formAddWorks.addEventListener("submit", (e) => {
@@ -232,7 +233,7 @@ function prevImg() {
         previewImage.src = e.target.result;
         previewImage.style.display = "block";
         previewImage.style.objectFit = "contain";
-        previewImage.style.maxWidth = "100%";
+        previewImage.style.maxWidth = "280px";
         previewImage.style.height = "auto";
         // labelFile.style.display ="none"
         // paragraphFile.style.display ="none"
