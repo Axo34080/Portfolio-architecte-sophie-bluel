@@ -143,12 +143,13 @@ function validateImageFile(file) {
   const regex = /\.(jpe?g|png|gif)$/i;
   return regex.test(file.name);
 }
+
 function addWorkToGallery(work) {
   //ajout du travail au tableau local
   localImages.push(work);
   
-  // Créez un nouvel élément DOM pour le projet
-  const newWork = document.createElement('div');
+  // Crée un nouvel élément DOM pour le projet
+  const newWork = document.createElement('figure');
   newWork.classList.add('work'); // Ajoutez la classe 'work' à l'élément
 
   // Ajoutez l'image du projet
@@ -156,14 +157,36 @@ function addWorkToGallery(work) {
   newWorkImage.src = work.imageUrl; // Utilisez l'URL de l'image renvoyée par le serveur
   newWork.appendChild(newWorkImage);
 
-  // Ajoutez l'icône de la poubelle
+  // Ajoutez le titre du projet (si applicable)
+  const newWorkTitle = document.createElement('figcaption');
+  newWorkTitle.textContent = work.title; // Utilisez le titre du travail renvoyé par le serveur
+  newWork.appendChild(newWorkTitle);
+
+  // Ajoute l'icône de la poubelle
   const newTrashIcon = document.createElement('i');
-  newTrashIcon.classList.add('fa-trash-can');
+  newTrashIcon.classList.add('fa-solid', 'fa-trash-can'); // Ajoutez les classes appropriées pour l'icône de poubelle
+  newTrashIcon.id = '116'; // Ajoutez l'ID approprié pour l'icône de poubelle
+  newTrashIcon.setAttribute('aria-hidden', 'true'); // Ajoutez l'attribut 'aria-hidden' à l'icône de poubelle
+  newTrashIcon.addEventListener('click', () => {
+    newWork.remove(); // Supprime l'élément parent (l'image, le titre et l'icône de la poubelle)
+  });
   newWork.appendChild(newTrashIcon);
 
-  // Ajoutez le nouveau projet à la galerie
+  // Ajoute le nouveau projet à la galerie
   const gallery = document.querySelector('.gallery');
   gallery.appendChild(newWork);
+
+  // Update modal gallery
+  const modalGallery = document.querySelector('.modalGallery');
+  const modalWork = document.createElement('figure'); // Create a new 'figure' element for the modal gallery
+  const modalWorkImage = newWorkImage.cloneNode(true);
+  const modalTrashIcon = newTrashIcon.cloneNode(true);
+  modalTrashIcon.addEventListener('click', () => {
+    modalWork.remove(); // Remove the 'figure' element from the modal gallery
+  });
+  modalWork.appendChild(modalWorkImage);
+  modalWork.appendChild(modalTrashIcon);
+  modalGallery.appendChild(modalWork);
 }
 
 function addWorks() {
@@ -198,7 +221,8 @@ function addWorks() {
         return response.json();
       })
       .then((data) => {
-        addWorkToGallery(data);
+        localImages.push(data);
+        createWorkModal(data);
         formAddWorks.reset();
         modalPortfolio.style.display = "flex";
         modalAddWorks.style.display = "none";
