@@ -47,7 +47,9 @@ function displayWorksGallery() {
 }
 
 function createWork(work) {
+  console.log(work);
   const figure = document.createElement("figure");
+  figure.setAttribute("class", work.id);
   const img = document.createElement("img");
   const figcaption = document.createElement("figcaption");
   figcaption.textContent = work.title;

@@ -110,8 +110,8 @@ function deleteWork() {
       fetch(`http://localhost:5678/api/works/${workID}`, deleteWorkID).then(() => {
         // Suppression de l'élément du DOM après confirmation de la suppression en base de données
         trash.parentElement.parentElement.remove();
-        }
-      );
+      });
+      document.getElementsByClassName(workID)[0].remove();
     });
   });
 }
@@ -223,6 +223,7 @@ function addWorks() {
       .then((data) => {
         localImages.push(data);
         createWorkModal(data);
+        createWork(data);
         formAddWorks.reset();
         modalPortfolio.style.display = "flex";
         modalAddWorks.style.display = "none";
